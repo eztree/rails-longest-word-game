@@ -16,7 +16,7 @@ class GamesController < ApplicationController
       if @parsed["found"]
         @status = true
       else
-        @status = "Meh"
+        @status = "meh"
       end
     else
       @status = false
