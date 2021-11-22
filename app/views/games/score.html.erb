@@ -1,4 +1,11 @@
 <h1>Result</h1>
 
-<%= @message %>
+<% case @status %>
+<% when true %>
+  <b>Congratulations!</b> <%= @parsed["word"].upcase %> is a valid English word!
+<% when "meh" %>
+  Sorry but <b><%= params[:word].upcase %></b> does not seem to be a valid English word...
+<% else %>
+  Sorry but <b><%= params[:word].upcase %></b> can't be built out of <%= @grid.join(", ") %>.
+<% end %>
 <%= link_to "Play again", new_path %>
