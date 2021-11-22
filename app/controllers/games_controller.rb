@@ -9,16 +9,24 @@ class GamesController < ApplicationController
   end
 
   def score
+    @words_array = params[:word].upcase.split("")
+    @grid = params[:letters].split
+    @parsed = checkword(params[:word])
+    if @words_array.all? { |letter| @grid.include? letter } && @words_array.tally.all? { |letter, count| count <= @grid.tally[letter] }
+      if @parsed["found"]
+        @message = "Congratulations! #{@parsed["word"].upcase} is a valid English word!"
+      else
+        @message = "Sorry but #{params[:word].upcase} does not seem to be a valid English word..."
+      end
+    else
+      @message = "Sorry but #{params[:word].upcase} can't be built out of #{@grid}."
+    end
+  end
+  
+  def checkword(word)
     url = "https://wagon-dictionary.herokuapp.com/#{params[:word]}"
     word_serialized = URI.open(url).read
-    @word = JSON.parse(word_serialized)
-    @array
-    if @word["found"]
-      @message = "Congratulations! #{@word["word"].upcase} is a valid English word!"
-    else
-      @message = "Nothing"
-    end
-    raise
+    JSON.parse(word_serialized)
   end
 end
 
